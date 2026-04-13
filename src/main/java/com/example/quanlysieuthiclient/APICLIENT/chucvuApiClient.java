@@ -36,17 +36,44 @@ public class chucvuApiClient {
         throw new Exception("Lỗi lấy danh sách chức vụ: " + response.statusCode());
     }
 
-    public boolean themChucVu(chucvu cv) throws Exception {
+    public void themChucVu(chucvu cv) throws Exception {
         String json = gson.toJson(cv);
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(apiUrl))
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(json))
                 .build();
+
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-        return response.statusCode() == 200;
+        if (response.statusCode() != 200) {
+            throw new Exception(response.body()); // ném exception với nội dung lỗi từ server
+        }
     }
 
+    public void suaChucVu(chucvu cv) throws Exception {
+        String json = gson.toJson(cv);
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(apiUrl + "/" + cv.getMachucvu()))
+                .header("Content-Type", "application/json")
+                .PUT(HttpRequest.BodyPublishers.ofString(json))
+                .build();
+
+        HttpResponse<String> response=httpClient.send(request,HttpResponse.BodyHandlers.ofString());
+        if (response.statusCode() != 200) {
+            throw new Exception(response.body());
+        }
+    }
+    public void xoaChucVu(String machucvu) throws Exception {
+        HttpRequest request=HttpRequest.newBuilder()
+                .uri(URI.create(apiUrl+"/"+machucvu))
+                .DELETE()
+                .build();
+
+        HttpResponse<String> response= httpClient.send(request,HttpResponse.BodyHandlers.ofString());
+        if(response.statusCode() !=200 ){
+            throw new Exception(response.body());
+        }
+    }
     public List<chucvu> timKiemChucVu(String keyword) throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(apiUrl + "/search?keyword=" + keyword))
@@ -61,5 +88,4 @@ public class chucvuApiClient {
         throw new Exception("lỗi tìm kiếm chức vụ:"+response.statusCode());
 
     }
-
 }

@@ -21,9 +21,14 @@ public class chucvuController {
         this.cvApiClient=chucvuApiClient.getInstance();
 
         cvView.addThemClickListener(new themchucvuListener());
+        cvView.addSuaClickListener(new suachucvuListener());
         cvView.addTimKiemClickListener(new timkiemchucvuListener());
         cvView.addClickTableListener(new clicktableListener());
+        cvView.addXoaClickListener(new xoachucvuListener());
+        cvView.addResetClickListener(new resetListener());
         loadTable();
+        cvView.xoaButton.setEnabled(false);
+        cvView.suaButton.setEnabled(false);
     }
     private void loadTable (){
         try{
@@ -46,12 +51,62 @@ public class chucvuController {
             String machucvuString= cvView.machucvuField.getText().trim();
             String tenchucvuString=cvView.tenchucvuField.getText().trim();
 
+            if (machucvuString.isEmpty()) {
+                JOptionPane.showMessageDialog(cvView, "mã nhân viên không được để trống");
+                return;
+            }
+            if (tenchucvuString.isEmpty()) {
+                JOptionPane.showMessageDialog(cvView, "mã nhân viên không được để trống");
+                return;
+            }
             chucvu cv=new chucvu(machucvuString,tenchucvuString);
             try{
                 cvApiClient.themChucVu(cv);
                 loadTable();
+                // Reset form
+                cvView.machucvuField.setText("");
+                cvView.tenchucvuField.setText("");
+                cvView.machucvuField.setEnabled(true);
             }catch (Exception exception){
-                JOptionPane.showMessageDialog(cvView,"lỗi thêm chức vụ"+exception.getMessage());
+                JOptionPane.showMessageDialog(cvView,"lỗi thêm chức vụ :"+exception.getMessage());
+            }
+        }
+    }
+
+    private class suachucvuListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String machucvuString = cvView.machucvuField.getText();
+            String tenchucvuString = cvView.tenchucvuField.getText();
+
+            int result = JOptionPane.showConfirmDialog(cvView, "bạn có chắc chắn muốn sửa");
+            if (result == JOptionPane.YES_OPTION) {
+                chucvu cv = new chucvu(machucvuString, tenchucvuString);
+                try {
+                    cvApiClient.suaChucVu(cv);
+                    loadTable();
+                } catch (Exception ex) {
+                    throw new RuntimeException("lỗi sửa chức vụ" + ex.getMessage());
+                }
+            }
+
+
+        }
+    }
+    private class xoachucvuListener implements ActionListener{
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String manhanvienString=cvView.machucvuField.getText();
+            int result = JOptionPane.showConfirmDialog(cvView,"bạn có chắc chắn muốn xóa");
+            if(result==JOptionPane.YES_OPTION){
+                try {
+                    cvApiClient.xoaChucVu(manhanvienString);
+                    loadTable();
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(cvView,"lỗi xóa chức vụ: "+ex.getMessage());
+                }
             }
         }
     }
@@ -81,6 +136,8 @@ public class chucvuController {
             selectedrow=cvView.chucvuJTable.getSelectedRow();
             cvView.machucvuField.setText(cvView.chucvuDefaultTableModel.getValueAt(selectedrow,0).toString().trim());
             cvView.tenchucvuField.setText(cvView.chucvuDefaultTableModel.getValueAt(selectedrow,1).toString().trim());
+            cvView.suaButton.setEnabled(true);
+            cvView.xoaButton.setEnabled(true);
         }
 
         @Override
@@ -101,6 +158,21 @@ public class chucvuController {
         @Override
         public void mouseExited(MouseEvent e) {
 
+        }
+    }
+    private class resetListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            cvView.machucvuField.setText("");
+            cvView.tenchucvuField.setText("");
+            cvView.timkiemField.setText("");
+            cvView.machucvuField.setEnabled(true);
+            cvView.tenchucvuField.setEnabled(true);
+            cvView.themButton.setEnabled(true);
+            cvView.xoaButton.setEnabled(false);
+            cvView.suaButton.setEnabled(false);
+            loadTable();
         }
     }
 }
