@@ -29,17 +29,16 @@ public class nhanvienApiClient {
     private final Gson gson=new Gson();
     private final HttpClient httpClient= HttpClient.newBuilder().build();
 
-    public boolean themNhanVien(nhanvien nhanvien) throws Exception {
-        String jsonbody=gson.toJson(nhanvien);
+    public void themNhanVien(nhanvien nhanvien) throws Exception {
+        String json=gson.toJson(nhanvien);
         HttpRequest request= HttpRequest.newBuilder()
                 .uri(URI.create(apiurl))
                 .header("Content-Type","application/json")
-                .POST(HttpRequest.BodyPublishers.ofString(jsonbody))
+                .POST(HttpRequest.BodyPublishers.ofString(json))
                 .build();
         HttpResponse response=httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-        if(response.statusCode()==200) return true;
-        else {
-            throw new Exception("loi khi goi api them nhan vien");
+        if(response.statusCode()!=200) {
+            throw new Exception(response.body().toString());
         }
     }
 
