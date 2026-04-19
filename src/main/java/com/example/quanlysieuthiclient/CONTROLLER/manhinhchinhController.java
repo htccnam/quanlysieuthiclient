@@ -5,10 +5,7 @@
 package com.example.quanlysieuthiclient.CONTROLLER;
 
 
-import com.example.quanlysieuthiclient.VIEW.chucvuView;
-import com.example.quanlysieuthiclient.VIEW.loaihangView;
-import com.example.quanlysieuthiclient.VIEW.manhinhchinh;
-import com.example.quanlysieuthiclient.VIEW.nhanvienViews;
+import com.example.quanlysieuthiclient.VIEW.*;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -37,8 +34,8 @@ public class manhinhchinhController {
         menu.addClickPhanLoaiHang(new clickPhanLoaiHangListener());
 //        menu.addClickTaoDonMoi(new clickTaoDonListener());
 //        menu.addClickChiTiet(new clickChiTietListener());
-//        menu.addClickNhaCungCap(new clickNhaCungCapListener());
-//        menu.addClickDanhSachSanPham(new clickSanPhamListener());
+        menu.addClickNhaCungCap(new clickNhaCungCapListener());
+        menu.addClickDanhSachSanPham(new clickSanPhamListener());
 //        menu.addClickDangXuat(new clickDangXuat());
 
         menu.setVisible(true);
@@ -136,41 +133,33 @@ private class clickPhanLoaiHangListener implements ActionListener {
 //        }
 //    }
 //
-//    private class clickNhaCungCapListener implements ActionListener {
-//
-//        @Override
-//        public void actionPerformed(ActionEvent e) {
-//            try {
-//                // Tạo View - Model - Controller cho Nhà Cung Cấp
-//                NhaCungCapView nccView = new NhaCungCapView();
-//                NhaCungCapModel nccModel = new NhaCungCapModel();
-//                new NhaCungCapController(nccView);
-//
-//                // Hiển thị
-//                menu.showpanel(nccView);
-//            } catch (Exception ex) {
-//                ex.printStackTrace();
-//                JOptionPane.showMessageDialog(menu, "Lỗi: " + ex.getMessage());
-//            }
-//        }
-//    }
-//
-//    private class clickSanPhamListener implements ActionListener {
-//
-//        @Override
-//        public void actionPerformed(ActionEvent e) {
-//            try {
-//                SanPhamView spView = new SanPhamView();
-//                new SanPhamController(spView);
-//
-//                menu.showpanel(spView);
-//            } catch (Exception ex) {
-//                ex.printStackTrace();
-//                JOptionPane.showMessageDialog(menu, "Lỗi: " + ex.getMessage());
-//            }
-//        }
-//    }
-//
+private class clickNhaCungCapListener implements ActionListener {
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        try {
+            nhacungcapView nccView = new nhacungcapView();
+            new nhacungcapController(nccView);
+            menu.showpanel(nccView);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(menu, "Lỗi: " + ex.getMessage());
+        }
+    }
+}
+
+    private class clickSanPhamListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            try {
+                sanphamView spView = new sanphamView();
+                new sanphamController(spView);
+                menu.showpanel(spView);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(menu, "Lỗi: " + ex.getMessage());
+            }
+        }
+    }
 //    private class clickDangXuat implements ActionListener {
 //
 //        @Override
