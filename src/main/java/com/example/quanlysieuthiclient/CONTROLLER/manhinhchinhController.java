@@ -6,6 +6,7 @@ package com.example.quanlysieuthiclient.CONTROLLER;
 
 
 import com.example.quanlysieuthiclient.VIEW.chucvuView;
+import com.example.quanlysieuthiclient.VIEW.loaihangView;
 import com.example.quanlysieuthiclient.VIEW.manhinhchinh;
 import com.example.quanlysieuthiclient.VIEW.nhanvienViews;
 import com.example.quanlysieuthiclient.VIEW.TaoDonView;
@@ -41,7 +42,7 @@ public class manhinhchinhController {
 //        menu.addClickNhaCungCap(new clickNhaCungCapListener());
 //        menu.addClickDanhSachSanPham(new clickSanPhamListener());
 //        menu.addClickDangXuat(new clickDangXuat());
-        
+
         menu.setVisible(true);
     }
 
@@ -107,15 +108,15 @@ public class manhinhchinhController {
 //
 //    }
 //
-//    private class clickPhanLoaiHangListener implements ActionListener {
-//
-//        @Override
-//        public void actionPerformed(ActionEvent e) {
-//            LoaiHangView lhView = new LoaiHangView();
-//            new LoaiHangController(lhView);
-//            menu.showpanel(lhView);
-//        }
-//    }
+private class clickPhanLoaiHangListener implements ActionListener {
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        loaihangView loaihang = new loaihangView();
+        loaihangController controller = new loaihangController(loaihang); // Đã sửa biến chucvu thành loaihang ở đây
+        menu.showpanel(loaihang);
+    }
+}
 //
     private class clickChiTietListener implements ActionListener {
 
