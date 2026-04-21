@@ -6,9 +6,12 @@ package com.example.quanlysieuthiclient.CONTROLLER;
 
 
 import com.example.quanlysieuthiclient.VIEW.chucvuView;
+import com.example.quanlysieuthiclient.VIEW.loaihangView;
 import com.example.quanlysieuthiclient.VIEW.manhinhchinh;
 import com.example.quanlysieuthiclient.VIEW.nhanvienViews;
-import com.example.quanlysieuthiclient.VIEW.KhachHangView;
+import com.example.quanlysieuthiclient.VIEW.TaoDonView;
+import com.example.quanlysieuthiclient.VIEW.ChiTietView;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.logging.Level;
@@ -34,12 +37,12 @@ public class manhinhchinhController {
         menu.addClickQuanLyChucVu(new clickChucVu());
 //        menu.addClickQuanLyKhuyenMai(new clickQuanLyKhuyenMai());
 //        menu.addClickPhanLoaiHang(new clickPhanLoaiHangListener());
-//        menu.addClickTaoDonMoi(new clickTaoDonListener());
-//        menu.addClickChiTiet(new clickChiTietListener());
+        menu.addClickTaoDonMoi(new clickTaoDonListener());
+        menu.addClickChiTiet(new clickChiTietListener());
 //        menu.addClickNhaCungCap(new clickNhaCungCapListener());
 //        menu.addClickDanhSachSanPham(new clickSanPhamListener());
 //        menu.addClickDangXuat(new clickDangXuat());
-        
+
         menu.setVisible(true);
     }
 
@@ -105,35 +108,35 @@ public class manhinhchinhController {
 //
 //    }
 //
-//    private class clickPhanLoaiHangListener implements ActionListener {
+private class clickPhanLoaiHangListener implements ActionListener {
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        loaihangView loaihang = new loaihangView();
+        loaihangController controller = new loaihangController(loaihang); // Đã sửa biến chucvu thành loaihang ở đây
+        menu.showpanel(loaihang);
+    }
+}
 //
-//        @Override
-//        public void actionPerformed(ActionEvent e) {
-//            LoaiHangView lhView = new LoaiHangView();
-//            new LoaiHangController(lhView);
-//            menu.showpanel(lhView);
-//        }
-//    }
-//
-//    private class clickChiTietListener implements ActionListener {
-//
-//        @Override
-//        public void actionPerformed(ActionEvent e) {
-//            ChiTietView ctView = new ChiTietView();
-//            new ChiTietController(ctView);
-//            menu.showpanel(ctView);
-//        }
-//    }
-//
-//    private class clickTaoDonListener implements ActionListener {
-//
-//        @Override
-//        public void actionPerformed(ActionEvent e) {
-//            TaoDonView tdView = new TaoDonView();
-//            new TaoDonController(tdView);
-//            menu.showpanel(tdView);
-//        }
-//    }
+    private class clickChiTietListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            ChiTietView ctView = new ChiTietView();
+            new ChiTietDonHangController(ctView);
+            menu.showpanel(ctView);
+        }
+    }
+
+    private class clickTaoDonListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            TaoDonView tdView = new TaoDonView();
+            new TaoDonController(tdView);
+            menu.showpanel(tdView);
+        }
+    }
 //
 //    private class clickNhaCungCapListener implements ActionListener {
 //

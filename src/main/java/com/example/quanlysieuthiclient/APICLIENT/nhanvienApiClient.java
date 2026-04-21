@@ -42,18 +42,46 @@ public class nhanvienApiClient {
         }
     }
 
-//    public boolean suaNhanVien(nhanvien nhanvien) throws Exception {
-//
-//    }
-//
-//    public boolean xoaNhanVien(String manhanvienString) throws Exception {
-//
-//    }
-//
-//    public List<nhanvien> timKiemNhanVien(String manhanvienString) throws Exception {
-//
-//    }
-//
+    public void suaNhanVien(nhanvien nhanvien) throws Exception {
+        String json=gson.toJson(nhanvien);
+        HttpRequest request= HttpRequest.newBuilder()
+                .uri(URI.create(apiurl+"/"+nhanvien.getManhanvien()))
+                .header("Content-Type","application/json")
+                .PUT(HttpRequest.BodyPublishers.ofString(json))
+                .build();
+        HttpResponse<String> response=httpClient.send(request,HttpResponse.BodyHandlers.ofString());
+        if(response.statusCode()!=200) {
+            throw new Exception(response.body().toString());
+        }
+    }
+
+    public void xoaNhanVien(String manhanvienString) throws Exception {
+            HttpRequest request=HttpRequest.newBuilder()
+                    .uri(URI.create(apiurl+"/"+manhanvienString))
+                    .DELETE()
+                    .build();
+
+            HttpResponse<String> response=httpClient.send(request,HttpResponse.BodyHandlers.ofString());
+            if(response.statusCode()!=200){
+                throw new Exception(response.body());
+            }
+    }
+
+    public List<nhanvien> timKiemNhanVien(String keyword) throws Exception {
+            HttpRequest request=HttpRequest.newBuilder()
+                    .uri(URI.create(apiurl+"/search?keyword="+keyword))
+                    .GET()
+                    .build();
+            HttpResponse<String> response=httpClient.send(request,HttpResponse.BodyHandlers.ofString());
+
+            if(response.statusCode()==200){
+                    Type type=new TypeToken<List<nhanvien>>(){}.getType();
+                    return gson.fromJson(response.body(),type);
+            }else {
+                    throw new Exception("lỗi tìm kiếm nhân viên:"+response.statusCode());
+            }
+    }
+
     public List<nhanvien> getAllNhanVien() throws Exception {
         HttpRequest request= HttpRequest.newBuilder()
                 .uri(URI.create(apiurl))
@@ -68,7 +96,7 @@ public class nhanvienApiClient {
             return gson.fromJson(response.body().toString(),reponsetype);
         }
         else {
-            throw new Exception("loi khi goi api them nhan vien");
+            throw new Exception("loi khi goi api them nhan vien"+response.statusCode());
         }
 
     }
