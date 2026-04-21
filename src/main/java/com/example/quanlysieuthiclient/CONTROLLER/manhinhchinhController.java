@@ -31,7 +31,7 @@ public class manhinhchinhController {
     public manhinhchinhController(manhinhchinh view) {
         this.menu = view;
         menu.addClickQuanLyNhanVien(new clickNhanSuListener());
-//        menu.addClickQuanLyKhachHang(new clickKhachHangListener());
+        menu.addClickQuanLyKhachHang(new clickKhachHangListener());
 //        menu.addClickHangThanhVien(new clickHangThanhVienListener());
 //        menu.addClickDoiQua(new clickDoiQuaListener());
         menu.addClickQuanLyChucVu(new clickChucVu());
@@ -63,16 +63,16 @@ public class manhinhchinhController {
 //            new CONTROLLER.DoiQuaController();
 //        }
 //    }
-//    private class clickKhachHangListener implements ActionListener {
-//
-//        @Override
-//        public void actionPerformed(ActionEvent e) {
-//            KhachHangView khachhang = new KhachHangView();
-//            new KhachHangController(khachhang);
-//            menu.showpanel(khachhang);
-//        }
-//
-//    }
+    private class clickKhachHangListener implements ActionListener {
+
+       @Override
+        public void actionPerformed(ActionEvent e) {
+            KhachHangView khachhang = new KhachHangView();
+            new KhachHangController(khachhang);
+            menu.showpanel(khachhang);
+        }
+
+   }
 //
 //    private class clickHangThanhVienListener implements ActionListener {
 //
