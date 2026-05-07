@@ -5,12 +5,7 @@
 package com.example.quanlysieuthiclient.CONTROLLER;
 
 
-import com.example.quanlysieuthiclient.VIEW.chucvuView;
-import com.example.quanlysieuthiclient.VIEW.loaihangView;
-import com.example.quanlysieuthiclient.VIEW.manhinhchinh;
-import com.example.quanlysieuthiclient.VIEW.nhanvienViews;
-import com.example.quanlysieuthiclient.VIEW.TaoDonView;
-import com.example.quanlysieuthiclient.VIEW.ChiTietView;
+import com.example.quanlysieuthiclient.VIEW.*;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
