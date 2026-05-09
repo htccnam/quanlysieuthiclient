@@ -7,10 +7,12 @@ import javax.swing.table.JTableHeader;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
+import com.toedter.calendar.JDateChooser;
 
 public class KhachHangView extends JPanel {
     // Các trường nhập liệu (Public để Controller truy cập trực tiếp)
-    public JTextField maKHField, hoTenField, sdtField, emailField, ngaySinhField, diachiField, timKiemField;
+    public JTextField maKHField, hoTenField, sdtField, emailField, diachiField, timKiemField;
+    public JDateChooser ngaySinhDate;
     public JComboBox<String> gioiTinhBox;
     public JButton themButton, suaButton, xoaButton, resetButton, timKiemButton;
     public JTable khachHangTable;
@@ -42,6 +44,7 @@ public class KhachHangView extends JPanel {
         addLabel(pnlInput, "Giới Tính:", 30, 160);
         gioiTinhBox = new JComboBox<>(new String[]{"Nam", "Nữ", "Khác"});
         gioiTinhBox.setBounds(180, 160, 350, 30);
+        gioiTinhBox.setFont(new Font("Arial", Font.BOLD, 14));
         pnlInput.add(gioiTinhBox);
 
         // Cột 2
@@ -49,7 +52,11 @@ public class KhachHangView extends JPanel {
         emailField = createTextField(800, 40); pnlInput.add(emailField);
 
         addLabel(pnlInput, "Ngày Sinh:", 600, 80);
-        ngaySinhField = createTextField(800, 80); pnlInput.add(ngaySinhField);
+        ngaySinhDate = new JDateChooser();
+        ngaySinhDate.setDateFormatString("yyyy-MM-dd");
+        ngaySinhDate.setBounds(800, 80, 350, 30);
+        ngaySinhDate.setFont(new Font("Arial", Font.BOLD, 14));
+        pnlInput.add(ngaySinhDate);
 
         addLabel(pnlInput, "Địa Chỉ:", 600, 120);
         diachiField = createTextField(800, 120);
@@ -89,11 +96,12 @@ public class KhachHangView extends JPanel {
         };
         khachHangTable = new JTable(khachHangModel);
         khachHangTable.setRowHeight(30);
+        khachHangTable.setFont(new Font("Arial", Font.BOLD, 14));
 
         JTableHeader header = khachHangTable.getTableHeader();
         header.setBackground(new Color(0, 102, 204));
         header.setForeground(Color.WHITE);
-        header.setFont(new Font("Arial", Font.BOLD, 14));
+        header.setFont(new Font("Arial", Font.BOLD, 16));
 
         JScrollPane scroll = new JScrollPane(khachHangTable);
         scroll.setBounds(20, 350, 1150, 500);
@@ -111,6 +119,7 @@ public class KhachHangView extends JPanel {
     private JTextField createTextField(int x, int y) {
         JTextField txt = new JTextField();
         txt.setBounds(x, y, 350, 30);
+        txt.setFont(new Font("Arial", Font.BOLD, 14));
         return txt;
     }
 

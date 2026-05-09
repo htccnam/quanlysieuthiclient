@@ -27,13 +27,13 @@ public class manhinhchinhController {
         this.menu = view;
         menu.addClickQuanLyNhanVien(new clickNhanSuListener());
         menu.addClickQuanLyKhachHang(new clickKhachHangListener());
-//        menu.addClickHangThanhVien(new clickHangThanhVienListener());
+        menu.addClickHangThanhVien(new clickHangThanhVienListener());
 //        menu.addClickDoiQua(new clickDoiQuaListener());
         menu.addClickQuanLyChucVu(new clickChucVu());
 //        menu.addClickQuanLyKhuyenMai(new clickQuanLyKhuyenMai());
         menu.addClickPhanLoaiHang(new clickPhanLoaiHangListener());
-//        menu.addClickTaoDonMoi(new clickTaoDonListener());
-//        menu.addClickChiTiet(new clickChiTietListener());
+        menu.addClickTaoDonMoi(new clickTaoDonListener());
+        menu.addClickChiTiet(new clickChiTietListener());
         menu.addClickNhaCungCap(new clickNhaCungCapListener());
         menu.addClickDanhSachSanPham(new clickSanPhamListener());
 //        menu.addClickDangXuat(new clickDangXuat());
@@ -68,19 +68,18 @@ public class manhinhchinhController {
         }
 
    }
-//
-//    private class clickHangThanhVienListener implements ActionListener {
-//
-//        @Override
-//        public void actionPerformed(ActionEvent e) {
-//
-//            HangThanhVienView htvView = new HangThanhVienView();
-//
-//            //Kích hoạt Controller : (Siêu quan trọng )
-//            new HangThanhVienController(htvView);
-//            menu.showpanel(htvView);
-//        }
-//    }
+
+    private class clickHangThanhVienListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+            HangThanhVienView htvView = new HangThanhVienView();
+
+            new HangThanhVienController(htvView);
+            menu.showpanel(htvView);
+        }
+    }
 
     private class clickChucVu implements ActionListener {
 
