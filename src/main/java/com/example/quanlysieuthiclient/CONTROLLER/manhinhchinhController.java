@@ -30,7 +30,7 @@ public class manhinhchinhController {
         menu.addClickHangThanhVien(new clickHangThanhVienListener());
         menu.addClickDoiQua(new clickDoiQuaListener());
         menu.addClickQuanLyChucVu(new clickChucVu());
-//        menu.addClickQuanLyKhuyenMai(new clickQuanLyKhuyenMai());
+        menu.addClickQuanLyKhuyenMai(new clickQuanLyKhuyenMai());
         menu.addClickPhanLoaiHang(new clickPhanLoaiHangListener());
         menu.addClickTaoDonMoi(new clickTaoDonListener());
         menu.addClickChiTiet(new clickChiTietListener());
@@ -92,17 +92,17 @@ public class manhinhchinhController {
         }
     }
 
-//    private class clickQuanLyKhuyenMai implements ActionListener {
-//
-//        @Override
-//        public void actionPerformed(ActionEvent e) {
-//            khuyenmaiView km = new khuyenmaiView();
-//            khuyenmaiController kmController = new khuyenmaiController(km);
-//            menu.showpanel(km);
-//        }
-//
-//    }
-//
+    private class clickQuanLyKhuyenMai implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            khuyenmaiView km = new khuyenmaiView();
+            khuyenmaiController kmController = new khuyenmaiController(km);
+            menu.showpanel(km);
+        }
+
+    }
+
 private class clickPhanLoaiHangListener implements ActionListener {
 
     @Override
