@@ -1,6 +1,10 @@
 package com.example.quanlysieuthiclient.CONTROLLER;
 
+import com.example.quanlysieuthiclient.APICLIENT.loaihangApiClient;
+import com.example.quanlysieuthiclient.APICLIENT.nhacungcapApiClient;
 import com.example.quanlysieuthiclient.APICLIENT.sanphamApiClient;
+import com.example.quanlysieuthiclient.DTO.loaihang;
+import com.example.quanlysieuthiclient.DTO.nhacungcap;
 import com.example.quanlysieuthiclient.DTO.sanpham;
 import com.example.quanlysieuthiclient.VIEW.sanphamView;
 
@@ -10,7 +14,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.sql.Date;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
@@ -30,20 +33,44 @@ public class sanphamController {
         spView.addXoaClickListener(new xoaSanPhamListener());
         spView.addResetClickListener(new resetListener());
 
+        loadComboBoxData();
         loadTable();
+
         spView.xoaButton.setEnabled(false);
         spView.suaButton.setEnabled(false);
+    }
+
+    private void loadComboBoxData() {
+        try {
+            List<loaihang> dsLoai = loaihangApiClient.getInstance().getAllLoaiHang();
+            spView.maloaiComboBox.removeAllItems();
+            for (loaihang lh : dsLoai) {
+                spView.maloaiComboBox.addItem(lh.getMaloai());
+            }
+
+            List<nhacungcap> dsNcc = nhacungcapApiClient.getInstance().getAllNhaCungCap();
+            spView.manccComboBox.removeAllItems();
+            for (nhacungcap ncc : dsNcc) {
+                spView.manccComboBox.addItem(ncc.getManhacungcap());
+            }
+        } catch (Exception e) {
+            System.out.println("Lỗi tải ComboBox: " + e.getMessage());
+        }
     }
 
     private void loadTable() {
         try {
             spView.spDefaultTableModel.setRowCount(0);
             List<sanpham> list = spApiClient.getAllSanPham();
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+
             for (sanpham sp : list) {
-                // Không hiển thị "xuất xứ" lên bảng cho đỡ chật, nhưng vẫn quản lý
+                String strNgaySx = (sp.getNgaysanxuat() != null) ? sdf.format(sp.getNgaysanxuat()) : "";
+                String strHanSd = (sp.getHansudung() != null) ? sdf.format(sp.getHansudung()) : "";
+
                 spView.spDefaultTableModel.addRow(new Object[]{
                         sp.getMasanpham(), sp.getTensanpham(), sp.getMaloai(), sp.getManhacungcap(),
-                        sp.getSoluong(), sp.getNgaysanxuat(), sp.getHansudung(),
+                        sp.getSoluong(), strNgaySx, strHanSd,
                         sp.getTinhtrang(), sp.getGianhap(), sp.getGiaban(), sp.getDonvitinh()
                 });
             }
@@ -52,7 +79,6 @@ public class sanphamController {
         }
     }
 
-    // LẤY VÀ ÉP KIỂU DỮ LIỆU TỪ VIEW (Cẩn thận các trường số và ngày tháng)
     private sanpham getModelFromView() throws Exception {
         String masp = spView.maspField.getText().trim();
         String tensp = spView.tenspField.getText().trim();
@@ -64,26 +90,21 @@ public class sanphamController {
         Double gianhap = spView.gianhapField.getText().isEmpty() ? 0.0 : Double.parseDouble(spView.gianhapField.getText().trim());
         Double giaban = spView.giabanField.getText().isEmpty() ? 0.0 : Double.parseDouble(spView.giabanField.getText().trim());
 
-        Date ngaysx = null, hansd = null;
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-        sdf.setLenient(false); // Bắt buộc nhập ngày hợp lệ (không cho phép nhập 32-01-2024)
-        try {
-            if (!spView.ngaysxField.getText().trim().isEmpty()) {
-                java.util.Date parsedDate = sdf.parse(spView.ngaysxField.getText().trim());
-                ngaysx = new Date(parsedDate.getTime());
-            }
-            if (!spView.hansdField.getText().trim().isEmpty()) {
-                java.util.Date parsedDate = sdf.parse(spView.hansdField.getText().trim());
-                hansd = new Date(parsedDate.getTime());
-            }
-        } catch (ParseException ex) {
-            throw new Exception("Ngày tháng phải nhập đúng định dạng dd-MM-yyyy (Ví dụ: 15-10-2024)");
-        }
+        // Lấy ngày chuẩn từ Lịch (JDateChooser)
+        java.util.Date nx = spView.ngaysxChooser.getDate();
+        java.util.Date hs = spView.hansdChooser.getDate();
+
+        Date ngaysx = (nx != null) ? new Date(nx.getTime()) : null;
+        Date hansd = (hs != null) ? new Date(hs.getTime()) : null;
+
+        String maloai = spView.maloaiComboBox.getSelectedItem() != null ? spView.maloaiComboBox.getSelectedItem().toString() : "";
+        String mancc = spView.manccComboBox.getSelectedItem() != null ? spView.manccComboBox.getSelectedItem().toString() : "";
+        String tinhtrang = spView.tinhtrangComboBox.getSelectedItem() != null ? spView.tinhtrangComboBox.getSelectedItem().toString() : "";
+        String dvt = spView.dvtComboBox.getSelectedItem() != null ? spView.dvtComboBox.getSelectedItem().toString() : "";
 
         return new sanpham(
-                masp, tensp, spView.maloaiField.getText().trim(), spView.manccField.getText().trim(),
-                spView.xuatxuField.getText().trim(), soluong, ngaysx, hansd,
-                spView.tinhtrangField.getText().trim(), gianhap, giaban, spView.donvitinhField.getText().trim()
+                masp, tensp, maloai, mancc, spView.xuatxuField.getText().trim(),
+                soluong, ngaysx, hansd, tinhtrang, gianhap, giaban, dvt
         );
     }
 
@@ -141,10 +162,15 @@ public class sanphamController {
             try {
                 String keyword = spView.timkiemField.getText().trim();
                 List<sanpham> list = spApiClient.timKiemSanPham(keyword);
+                SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+
                 for (sanpham sp : list) {
+                    String strNgaySx = (sp.getNgaysanxuat() != null) ? sdf.format(sp.getNgaysanxuat()) : "";
+                    String strHanSd = (sp.getHansudung() != null) ? sdf.format(sp.getHansudung()) : "";
+
                     spView.spDefaultTableModel.addRow(new Object[]{
                             sp.getMasanpham(), sp.getTensanpham(), sp.getMaloai(), sp.getManhacungcap(),
-                            sp.getSoluong(), sp.getNgaysanxuat(), sp.getHansudung(),
+                            sp.getSoluong(), strNgaySx, strHanSd,
                             sp.getTinhtrang(), sp.getGianhap(), sp.getGiaban(), sp.getDonvitinh()
                     });
                 }
@@ -157,27 +183,29 @@ public class sanphamController {
     private class clicktableListener implements MouseListener {
         @Override
         public void mouseClicked(MouseEvent e) {
-            spView.maspField.setEnabled(false); // Khóa sửa mã
+            spView.maspField.setEnabled(false);
             selectedrow = spView.spJTable.getSelectedRow();
 
-            // Lấy lại danh sách đầy đủ để lấy được biến 'xuatxu' không bị hiển thị trên bảng
             try {
                 List<sanpham> list = spApiClient.getAllSanPham();
-                sanpham sp = list.get(selectedrow); // Dòng được click sẽ tương ứng với index trong list
-                SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+                sanpham sp = list.get(selectedrow);
 
                 spView.maspField.setText(sp.getMasanpham());
                 spView.tenspField.setText(sp.getTensanpham() != null ? sp.getTensanpham() : "");
-                spView.maloaiField.setText(sp.getMaloai() != null ? sp.getMaloai() : "");
-                spView.manccField.setText(sp.getManhacungcap() != null ? sp.getManhacungcap() : "");
                 spView.xuatxuField.setText(sp.getXuatxu() != null ? sp.getXuatxu() : "");
                 spView.soluongField.setText(sp.getSoluong() != null ? String.valueOf(sp.getSoluong()) : "0");
-                spView.ngaysxField.setText(sp.getNgaysanxuat() != null ? sdf.format(sp.getNgaysanxuat()) : "");
-                spView.hansdField.setText(sp.getHansudung() != null ? sdf.format(sp.getHansudung()) : "");
-                spView.tinhtrangField.setText(sp.getTinhtrang() != null ? sp.getTinhtrang() : "");
                 spView.gianhapField.setText(sp.getGianhap() != null ? String.valueOf(sp.getGianhap()) : "0.0");
                 spView.giabanField.setText(sp.getGiaban() != null ? String.valueOf(sp.getGiaban()) : "0.0");
-                spView.donvitinhField.setText(sp.getDonvitinh() != null ? sp.getDonvitinh() : "");
+
+                // Đổ dữ liệu vào Lịch JDateChooser
+                spView.ngaysxChooser.setDate(sp.getNgaysanxuat());
+                spView.hansdChooser.setDate(sp.getHansudung());
+
+                // Set cho ComboBox
+                if (sp.getMaloai() != null) spView.maloaiComboBox.setSelectedItem(sp.getMaloai());
+                if (sp.getManhacungcap() != null) spView.manccComboBox.setSelectedItem(sp.getManhacungcap());
+                if (sp.getTinhtrang() != null) spView.tinhtrangComboBox.setSelectedItem(sp.getTinhtrang());
+                if (sp.getDonvitinh() != null) spView.dvtComboBox.setSelectedItem(sp.getDonvitinh());
 
                 spView.suaButton.setEnabled(true);
                 spView.xoaButton.setEnabled(true);
@@ -203,17 +231,20 @@ public class sanphamController {
     private void resetForm() {
         spView.maspField.setText("");
         spView.tenspField.setText("");
-        spView.maloaiField.setText("");
-        spView.manccField.setText("");
         spView.xuatxuField.setText("");
         spView.soluongField.setText("");
-        spView.ngaysxField.setText("");
-        spView.hansdField.setText("");
-        spView.tinhtrangField.setText("");
         spView.gianhapField.setText("");
         spView.giabanField.setText("");
-        spView.donvitinhField.setText("");
         spView.timkiemField.setText("");
+
+        // Reset ngày tháng
+        spView.ngaysxChooser.setDate(null);
+        spView.hansdChooser.setDate(null);
+
+        if(spView.maloaiComboBox.getItemCount() > 0) spView.maloaiComboBox.setSelectedIndex(0);
+        if(spView.manccComboBox.getItemCount() > 0) spView.manccComboBox.setSelectedIndex(0);
+        spView.tinhtrangComboBox.setSelectedIndex(0);
+        spView.dvtComboBox.setSelectedIndex(0);
 
         spView.maspField.setEnabled(true);
         spView.themButton.setEnabled(true);

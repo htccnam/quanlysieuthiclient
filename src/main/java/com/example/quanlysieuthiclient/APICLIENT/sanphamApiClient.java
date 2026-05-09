@@ -19,8 +19,6 @@ public class sanphamApiClient {
     private static final sanphamApiClient instance = new sanphamApiClient();
 
     private final String apiUrl = configLoader.getbaseapiurl() + "/sanpham";
-
-    // Đã nâng cấp Gson: Ép kiểu format ngày tháng yyyy-MM-dd để tránh lỗi do Java Date
     private final Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
     public HttpClient httpClient = HttpClient.newBuilder().build();
 
