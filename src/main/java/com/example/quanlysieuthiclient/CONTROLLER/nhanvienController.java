@@ -88,7 +88,7 @@ public class nhanvienController {
             String textMaNhanVienString = views.manhanvienField.getText().toString().trim();
             String textTenNhanVienString = views.tennhanvienField.getText().toString().trim();
             java.util.Date ngaySinhDate = views.ngaysinhChooser.getDate();
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd");
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             String ngaysinh = format.format(ngaySinhDate);
 
             String gioiTinhString = views.gioitinhComboBox.getSelectedItem().toString().trim();
