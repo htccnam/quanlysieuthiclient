@@ -21,32 +21,43 @@ public class HangThanhVienView extends JPanel {
         setPreferredSize(new Dimension(1200, 900));
         setBackground(new Color(245, 248, 250));
 
-        // --- PHẦN 1: QUY ĐỊNH HẠNG (Bên trái) ---
         JPanel pnlRules = new JPanel(null);
-        pnlRules.setBounds(20, 20, 550, 180);
+        pnlRules.setBounds(20, 20, 550, 200);
         pnlRules.setBackground(Color.WHITE);
         pnlRules.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createLineBorder(Color.LIGHT_GRAY), " Quy Định Hạng ",
+                BorderFactory.createLineBorder(Color.LIGHT_GRAY), " Quy Định Hạng & Quyền Lợi ",
                 TitledBorder.LEADING, TitledBorder.TOP, new Font("Arial", Font.BOLD, 16), new Color(0, 102, 204)));
 
         String[] colRules = {"Tên Hạng", "Mức Chi Tiêu", "Quyền Lợi"};
+
+        // Rút gọn text một chút xíu để vừa vặn trên bảng nhưng vẫn đầy đủ ý nghĩa
         Object[][] dataRules = {
-                {"Bạc (Silver)", "> 3 Triệu", "Giảm 2%"},
-                {"Vàng (Gold)", "> 10 Triệu", "Giảm 5%"},
-                {"Kim Cương", "> 30 Triệu", "Giảm 10%"}
+                {"Member (Đồng)", "> 500.000đ", "Nhận tin KM, Tích điểm đổi quà"},
+                {"Bạc (Silver)", "> 1.000.000đ", "Free gói quà, Ưu tiên thanh toán"},
+                {"Vàng (Gold)", "> 3.000.000đ", "Quà Lễ/Tết, Free ship (bán kính gần)"},
+                {"Kim Cương (VIP)", "> 7.000.000đ", "Quầy riêng, Quà độc quyền, Giữ hạng"}
         };
+
         JTable tblRules = new JTable(new DefaultTableModel(dataRules, colRules));
         tblRules.setFont(new Font("Arial", Font.BOLD, 13));
-        tblRules.setRowHeight(25);
+        tblRules.setRowHeight(30); // Tăng độ cao mỗi dòng cho thoáng
         tblRules.setEnabled(false);
+
+        // Chỉnh độ rộng cột: Ưu tiên cột Quyền Lợi siêu rộng
+        tblRules.getColumnModel().getColumn(0).setPreferredWidth(110);
+        tblRules.getColumnModel().getColumn(1).setPreferredWidth(100);
+        tblRules.getColumnModel().getColumn(2).setPreferredWidth(300);
+
         JScrollPane scrollRules = new JScrollPane(tblRules);
-        scrollRules.setBounds(15, 30, 520, 130);
+        // Tăng chiều cao của ScrollPane
+        scrollRules.setBounds(15, 30, 520, 150);
         pnlRules.add(scrollRules);
         add(pnlRules);
 
         // --- PHẦN 2: TRA CỨU NHANH (Bên phải) ---
         JPanel pnlLookup = new JPanel(null);
-        pnlLookup.setBounds(590, 20, 580, 180);
+        // Tương tự, kéo dài khung này ra cho bằng khung bên trái (height = 200)
+        pnlLookup.setBounds(590, 20, 580, 200);
         pnlLookup.setBackground(Color.WHITE);
         pnlLookup.setBorder(BorderFactory.createTitledBorder(
                 BorderFactory.createLineBorder(Color.LIGHT_GRAY), " Tra Cứu Chi Tiêu ",
@@ -76,9 +87,25 @@ public class HangThanhVienView extends JPanel {
         pnlLookup.add(lblTongChiTieuValue);
         add(pnlLookup);
 
+        // --- NÚT CHỨC NĂNG ---
+        btnThem = new JButton("Thêm Xếp Hạng");
+        btnThem.setBounds(830, 790, 160, 45);
+        btnThem.setBackground(new Color(40, 167, 69));
+        btnThem.setForeground(Color.WHITE);
+        btnThem.setFont(new Font("Arial", Font.BOLD, 14));
+        add(btnThem);
+
+        btnXoa = new JButton("Xóa Xếp Hạng");
+        btnXoa.setBounds(1010, 790, 160, 45);
+        btnXoa.setBackground(new Color(220, 53, 69));
+        btnXoa.setForeground(Color.WHITE);
+        btnXoa.setFont(new Font("Arial", Font.BOLD, 14));
+        add(btnXoa);
+
         // --- PHẦN 3: BẢNG DANH SÁCH XẾP HẠNG ---
         JLabel lblTitle = new JLabel("DANH SÁCH THÀNH VIÊN ĐÃ XẾP HẠNG", JLabel.CENTER);
-        lblTitle.setBounds(20, 220, 1150, 40);
+        // Đẩy tọa độ y xuống 240 (tránh đè vào bảng quy định)
+        lblTitle.setBounds(20, 240, 1150, 40);
         lblTitle.setFont(new Font("Arial", Font.BOLD, 20));
         lblTitle.setForeground(new Color(0, 102, 204));
         add(lblTitle);
@@ -97,22 +124,8 @@ public class HangThanhVienView extends JPanel {
         header.setFont(new Font("Arial", Font.BOLD, 15));
 
         JScrollPane scrollTable = new JScrollPane(tblXepHang);
-        scrollTable.setBounds(20, 270, 1150, 500);
+        // Đẩy tọa độ y xuống 290 và giảm height một chút để nút không bị che
+        scrollTable.setBounds(20, 290, 1150, 480);
         add(scrollTable);
-
-        // --- NÚT CHỨC NĂNG ---
-        btnThem = new JButton("Thêm Xếp Hạng");
-        btnThem.setBounds(830, 790, 160, 45);
-        btnThem.setBackground(new Color(40, 167, 69));
-        btnThem.setForeground(Color.WHITE);
-        btnThem.setFont(new Font("Arial", Font.BOLD, 14));
-        add(btnThem);
-
-        btnXoa = new JButton("Xóa Xếp Hạng");
-        btnXoa.setBounds(1010, 790, 160, 45);
-        btnXoa.setBackground(new Color(220, 53, 69));
-        btnXoa.setForeground(Color.WHITE);
-        btnXoa.setFont(new Font("Arial", Font.BOLD, 14));
-        add(btnXoa);
     }
 }

@@ -24,7 +24,12 @@ public class DialogThemThanhVien extends JDialog {
         lbl1.setFont(new Font("Arial", Font.BOLD, 14));
         add(lbl1);
 
-        cboHang = new JComboBox<>(new String[]{"Bạc (Silver)", "Vàng (Gold)", "Kim Cương"});
+        cboHang = new JComboBox<>(new String[]{
+                "Member (Đồng)",
+                "Bạc (Silver)",
+                "Vàng (Gold)",
+                "Kim Cương (Diamond)"
+        });
         cboHang.setBounds(30, 65, 420, 40);
         cboHang.setFont(new Font("Arial", Font.BOLD, 14));
         add(cboHang);
