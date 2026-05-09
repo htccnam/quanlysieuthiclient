@@ -16,7 +16,6 @@ public class KhachHangController {
         this.view = view;
         this.apiClient = KhachHangApiClient.getInstance();
 
-        // Gắn sự kiện (Giống mẫu chucvuController)
         this.view.addThemClickListener(new ThemListener());
         this.view.addSuaClickListener(new SuaListener());
         this.view.addXoaClickListener(new XoaListener());
@@ -60,7 +59,13 @@ public class KhachHangController {
                 view.hoTenField.setText(view.khachHangModel.getValueAt(row, 1).toString());;
                 view.gioiTinhBox.setSelectedItem(view.khachHangModel.getValueAt(row, 2).toString());
                 view.sdtField.setText(view.khachHangModel.getValueAt(row, 3).toString());
-                view.ngaySinhField.setText(view.khachHangModel.getValueAt(row, 4) != null ? view.khachHangModel.getValueAt(row, 4).toString() : "");
+                Object dobObj = view.khachHangModel.getValueAt(row, 4); // Index cột Ngày sinh
+                if (dobObj != null) {
+                    LocalDate ld = LocalDate.parse(dobObj.toString());
+                    view.ngaySinhDate.setDate(java.sql.Date.valueOf(ld));
+                } else {
+                    view.ngaySinhDate.setDate(null);
+                }
                 view.diachiField.setText(view.khachHangModel.getValueAt(row, 5) != null ? view.khachHangModel.getValueAt(row, 5).toString() : "");
                 view.emailField.setText(view.khachHangModel.getValueAt(row, 6) != null ? view.khachHangModel.getValueAt(row, 6).toString() : "");
 
@@ -75,13 +80,18 @@ public class KhachHangController {
         @Override
         public void actionPerformed(ActionEvent e) {
             try {
+                java.util.Date date = view.ngaySinhDate.getDate();
+                if (date == null) throw new Exception("Vui lòng chọn ngày sinh!");
+
+                LocalDate ngaySinh = new java.sql.Date(date.getTime()).toLocalDate();
+
                 KhachHang kh = new KhachHang(
                         view.maKHField.getText().trim(),
                         view.hoTenField.getText().trim(),
                         view.sdtField.getText().trim(),
                         view.gioiTinhBox.getSelectedItem().toString(),
                         view.emailField.getText().trim(),
-                        LocalDate.parse(view.ngaySinhField.getText().trim()),
+                        ngaySinh,
                         view.diachiField.getText().trim(),
                         0
 
@@ -103,7 +113,7 @@ public class KhachHangController {
             view.hoTenField.setText("");
             view.sdtField.setText("");
             view.emailField.setText("");
-            view.ngaySinhField.setText("");
+            view.ngaySinhDate.setDate(null);
             view.diachiField.setText("");
             view.maKHField.setEnabled(true);
             view.suaButton.setEnabled(false);
@@ -147,13 +157,17 @@ public class KhachHangController {
         @Override
         public void actionPerformed(ActionEvent e) {
             try {
+                java.util.Date date = view.ngaySinhDate.getDate();
+                if (date == null) throw new Exception("Vui lòng chọn ngày sinh!");
+
+                LocalDate ngaySinh = new java.sql.Date(date.getTime()).toLocalDate();
                 KhachHang kh = new KhachHang(
                         view.maKHField.getText().trim(),
                         view.hoTenField.getText().trim(),
                         view.sdtField.getText().trim(),
                         view.gioiTinhBox.getSelectedItem().toString(),
                         view.emailField.getText().trim(),
-                        LocalDate.parse(view.ngaySinhField.getText().trim()),
+                        ngaySinh,
                         view.diachiField.getText().trim(),
                         0
                 );
