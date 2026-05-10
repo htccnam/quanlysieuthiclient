@@ -46,7 +46,7 @@ public class chucvuApiClient {
 
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
         if (response.statusCode() != 200) {
-            throw new Exception(response.body()); // ném exception với nội dung lỗi từ server
+            throw new Exception(response.body());
         }
     }
 

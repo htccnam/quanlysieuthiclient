@@ -29,7 +29,7 @@ public class loginController {
             try {
                 if (tkApi.kiemTraDangNhap(taikhoan, matkhau)) {
                     manhinhchinh menu = new manhinhchinh();
-                    new manhinhchinhController(menu); // cần tạo controller chính nếu chưa có
+                    new manhinhchinhController(menu);
                     menu.setVisible(true);
                     view.dispose();
                     JOptionPane.showMessageDialog(view, "Đăng nhập thành công");
