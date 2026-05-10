@@ -1,16 +1,17 @@
 package com.example.quanlysieuthiclient.VIEW;
 
-//import DTO.SanPham;
+import com.example.quanlysieuthiclient.DTO.sanpham;
 import com.toedter.calendar.JDateChooser;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class TaoDonView extends JPanel {
 
     private JDateChooser ngayGD;
-    private JTextField txtMaDon, txtTimKiem, txtHang;
+    private JTextField txtMaDon, txtTimKiem /*txtHang*/;
     private JComboBox<String> cboBanHang, cboThanhToan, cboNV, cboMaKM, cboKH;
     private JTable table, tableSanPham;
     private JLabel lblTongTien, lblTamTinh, lblKM;
@@ -40,8 +41,8 @@ public class TaoDonView extends JPanel {
         g.fill = GridBagConstraints.HORIZONTAL;
 
         txtMaDon = new JTextField();
-        txtHang = new JTextField();
-        txtHang.setEditable(false);
+        /*txtHang = new JTextField();
+        txtHang.setEditable(false);*/
         ngayGD = new JDateChooser();
         cboNV = new JComboBox<>(new String[]{});
         cboKH = new JComboBox<>(new String[]{});
@@ -93,11 +94,11 @@ public class TaoDonView extends JPanel {
         g.gridx = 5;
         p.add(cboMaKM, g);
 
-        g.gridx = 6;
+        /*g.gridx = 6;
         p.add(new JLabel("Hạng thành viên"), g);
 
         g.gridx = 7;
-        p.add(txtHang, g);
+        p.add(txtHang, g);*/
 
         return p;
     }
@@ -246,24 +247,24 @@ public class TaoDonView extends JPanel {
         }
     }
 
-    /* public void loadDataTable(ArrayList<SanPham> list){
+    public void loadDataTable(List<sanpham> list){
         DefaultTableModel model = (DefaultTableModel) tableSanPham.getModel();
 
         model.setRowCount(0);
-        for (SanPham sp : list) {
+        for (sanpham sp : list) {
             Object[] row = {
-                    sp.getMaSP(),
-                    sp.getTenSP(),
-                    sp.getGiaBan(),
-                    sp.getSoLuong()
+                    sp.getMasanpham(),
+                    sp.getTensanpham(),
+                    sp.getGiaban(),
+                    sp.getSoluong()
             };
             model.addRow(row);
         }
-    } */
-
-    public JTextField getTxtHang() {
-        return txtHang;
     }
+
+   /* public JTextField getTxtHang() {
+        return txtHang;
+    }*/
 
     public JButton getBtnLuu() {
         return btnLuu;
@@ -340,4 +341,5 @@ public class TaoDonView extends JPanel {
     public DefaultTableModel getModelTableTrai() {
         return (DefaultTableModel) tableSanPham.getModel();
     }
+
 }
