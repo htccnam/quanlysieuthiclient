@@ -89,8 +89,8 @@ public class khuyenmaiView extends JPanel {
         add(motaField);
 
         //sotiemgiam
-        JLabel sotiengiamJLabel = new JLabel("Số tiền giảm");
-        sotiengiamJLabel.setBounds(850, 150, 200, 40);
+        JLabel sotiengiamJLabel = new JLabel("Số tiền giảm (VNĐ):");
+        sotiengiamJLabel.setBounds(850, 150, 230, 40);
         sotiengiamJLabel.setFont(new Font("Arial",Font.BOLD,24));
         add(sotiengiamJLabel);
 
