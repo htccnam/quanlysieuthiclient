@@ -37,7 +37,7 @@ public class khuyenmaiApiClient {
             }
             throw new Exception("lỗi lấy danh sách khuyến mại , mã lỗi:"+response.statusCode());
         }
-    // Thêm
+
     public void themKhuyenMai(khuyenmai km) throws Exception {
         String json = gson.toJson(km);
         HttpRequest request = HttpRequest.newBuilder()
@@ -51,7 +51,6 @@ public class khuyenmaiApiClient {
         }
     }
 
-    // Sửa
     public void suaKhuyenMai(khuyenmai km) throws Exception {
         String json = gson.toJson(km);
         HttpRequest request = HttpRequest.newBuilder()
@@ -65,7 +64,7 @@ public class khuyenmaiApiClient {
         }
     }
 
-    // Xóa
+
     public void xoaKhuyenMai(String makhuyenmai) throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(apiUrl + "/" + makhuyenmai))
@@ -77,7 +76,7 @@ public class khuyenmaiApiClient {
         }
     }
 
-    // Tìm kiếm
+
     public List<khuyenmai> timKiemKhuyenMai(String keyword) throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(apiUrl + "/search?keyword=" + keyword))

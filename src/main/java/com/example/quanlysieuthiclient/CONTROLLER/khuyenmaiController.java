@@ -23,7 +23,6 @@ public class khuyenmaiController {
         this.kmView = view;
         this.kmApiClient = khuyenmaiApiClient.getInstance();
 
-        // Gắn listener
         kmView.addThemActionListener(new them());
         kmView.addSuaActionListener(new sua());
         kmView.addXoaActionListener(new xoa());
@@ -53,7 +52,6 @@ public class khuyenmaiController {
         }
     }
 
-    // Thêm
     class them implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -63,7 +61,6 @@ public class khuyenmaiController {
             String sotiengiamText = kmView.sotiemgiamField.getText().trim();
             java.util.Date ngaytaoDate = kmView.ngaytaoChooser.getDate();
 
-            // Validation
             if (ma.isEmpty()) {
                 JOptionPane.showMessageDialog(kmView, "Mã khuyến mãi không được trống");
                 return;
@@ -96,7 +93,6 @@ public class khuyenmaiController {
         }
     }
 
-    // Sửa
     class sua implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -135,7 +131,6 @@ public class khuyenmaiController {
         }
     }
 
-    // Xóa
     class xoa implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -155,7 +150,6 @@ public class khuyenmaiController {
         }
     }
 
-    // Reset form
     class reset implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -175,7 +169,6 @@ public class khuyenmaiController {
         kmView.ngaytaoChooser.setDate(cal.getTime());
     }
 
-    // Tìm kiếm
     class timkiem implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
