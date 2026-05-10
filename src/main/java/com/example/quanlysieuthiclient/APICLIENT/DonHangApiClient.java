@@ -24,7 +24,6 @@ public class DonHangApiClient {
             .create();
     private final HttpClient httpClient = HttpClient.newBuilder().build();
 
-    // Lấy danh sách đơn hàng
     public List<DonHang> getAllDonHang() throws Exception {
         HttpRequest request = HttpRequest.newBuilder().uri(URI.create(apiUrl)).GET().build();
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
@@ -35,7 +34,6 @@ public class DonHangApiClient {
         throw new Exception("Lỗi lấy danh sách đơn hàng");
     }
 
-    // Lấy chi tiết của một đơn hàng
     public List<ChiTietDon> getChiTietByMa(String maDH) throws Exception {
         HttpRequest request = HttpRequest.newBuilder().uri(URI.create(apiUrl + "/" + maDH + "/chitiet")).GET().build();
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
@@ -46,7 +44,6 @@ public class DonHangApiClient {
         throw new Exception("Lỗi lấy chi tiết đơn hàng");
     }
 
-    // Thêm mới đơn hàng (Gửi kèm danh sách chi tiết)
     public void saveDonHang(DonHang dh, List<ChiTietDon> dsChiTiet) throws Exception {
         // Tạo một Wrapper object hoặc Map để gửi cả 2 thông tin cùng lúc
         var payload = java.util.Map.of("donHang", dh, "chitiet", dsChiTiet);
