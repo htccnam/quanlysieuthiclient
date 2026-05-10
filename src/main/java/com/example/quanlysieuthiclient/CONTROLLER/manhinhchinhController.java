@@ -30,13 +30,13 @@ public class manhinhchinhController {
         menu.addClickHangThanhVien(new clickHangThanhVienListener());
         menu.addClickDoiQua(new clickDoiQuaListener());
         menu.addClickQuanLyChucVu(new clickChucVu());
-//        menu.addClickQuanLyKhuyenMai(new clickQuanLyKhuyenMai());
+        menu.addClickQuanLyKhuyenMai(new clickQuanLyKhuyenMai());
         menu.addClickPhanLoaiHang(new clickPhanLoaiHangListener());
         menu.addClickTaoDonMoi(new clickTaoDonListener());
         menu.addClickChiTiet(new clickChiTietListener());
         menu.addClickNhaCungCap(new clickNhaCungCapListener());
         menu.addClickDanhSachSanPham(new clickSanPhamListener());
-//        menu.addClickDangXuat(new clickDangXuat());
+        menu.addClickDangXuat(new clickDangXuat());
 
         menu.setVisible(true);
     }
@@ -92,17 +92,17 @@ public class manhinhchinhController {
         }
     }
 
-//    private class clickQuanLyKhuyenMai implements ActionListener {
-//
-//        @Override
-//        public void actionPerformed(ActionEvent e) {
-//            khuyenmaiView km = new khuyenmaiView();
-//            khuyenmaiController kmController = new khuyenmaiController(km);
-//            menu.showpanel(km);
-//        }
-//
-//    }
-//
+    private class clickQuanLyKhuyenMai implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            khuyenmaiView km = new khuyenmaiView();
+            khuyenmaiController kmController = new khuyenmaiController(km);
+            menu.showpanel(km);
+        }
+
+    }
+
 private class clickPhanLoaiHangListener implements ActionListener {
 
     @Override
@@ -160,20 +160,20 @@ private class clickNhaCungCapListener implements ActionListener {
             }
         }
     }
-//    private class clickDangXuat implements ActionListener {
-//
-//        @Override
-//        public void actionPerformed(ActionEvent e) {
-//            int check = JOptionPane.showConfirmDialog(menu, "bạn có chắc chắn muốn đăng xuất");
-//            if (check == JOptionPane.YES_OPTION) {
-//                LoginView loginView = new LoginView();
-//                loginController lgController = new loginController(loginView);
-//                menu.dispose();
-//                loginView.setVisible(true);
-//            }
-//
-//        }
-//    }
+    private class clickDangXuat implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            int check = JOptionPane.showConfirmDialog(menu, "bạn có chắc chắn muốn đăng xuất");
+            if (check == JOptionPane.YES_OPTION) {
+                LoginView loginView = new LoginView();
+                loginController lgController = new loginController(loginView);
+                menu.dispose();
+                loginView.setVisible(true);
+            }
+
+        }
+    }
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {

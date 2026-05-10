@@ -9,10 +9,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 
 public class ChiTietDon {
-    private String maDH;
-    private String maSP;
-    private String tenSP;
+    private String madonhang;
+    private String masanpham;
+    private String tensanpham;
     private int soluong;
-    private double gia;
+    private double dongia;
     private double thanhtien;
 }
