@@ -9,14 +9,12 @@ import com.example.quanlysieuthiclient.APICLIENT.nhanvienApiClient;
 import com.example.quanlysieuthiclient.DTO.chucvu;
 import com.example.quanlysieuthiclient.DTO.nhanvien;
 import com.example.quanlysieuthiclient.VIEW.nhanvienViews;
-import jdk.jshell.execution.Util;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.beans.JavaBean;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -36,7 +34,7 @@ public class nhanvienController {
     public nhanvienController(nhanvienViews v) {
         this.views = v;
         nvApiClient = nhanvienApiClient.getInstance();
-        cvApiClient  =chucvuApiClient.getInstance();
+        cvApiClient = chucvuApiClient.getInstance();
 
         views.addThemListener(new themNhanVienlistener());
         views.addSuaListener(new capNhapNhanVienListener());
@@ -90,8 +88,8 @@ public class nhanvienController {
             String textMaNhanVienString = views.manhanvienField.getText().toString().trim();
             String textTenNhanVienString = views.tennhanvienField.getText().toString().trim();
             java.util.Date ngaySinhDate = views.ngaysinhChooser.getDate();
-            SimpleDateFormat format=new SimpleDateFormat("yyyy-mm-dd");
-            String ngaysinh=format.format(ngaySinhDate);
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            String ngaysinh = format.format(ngaySinhDate);
 
             String gioiTinhString = views.gioitinhComboBox.getSelectedItem().toString().trim();
 
@@ -137,7 +135,10 @@ public class nhanvienController {
         @Override
         public void actionPerformed(ActionEvent e) {
             String textTenNhanVienString = views.tennhanvienField.getText().toString().trim();
-            String ngaysinhDate = views.ngaysinhChooser.getDate().toString();
+            java.util.Date ngaysinhDate = views.ngaysinhChooser.getDate();
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            String ngaysinh = format.format(ngaysinhDate);
+
             String textGioiTinhString = views.gioitinhComboBox.getSelectedItem().toString().trim();
             String textSoDienThoaiString = views.sodienthoaiField.getText().toString().trim();
             String textEmailString = views.emailField.getText().toString().trim();
@@ -158,15 +159,15 @@ public class nhanvienController {
             }
             String textMaNhanVienString = views.manhanvienField.getText();
 
-            nhanvien nv = new nhanvien(textMaNhanVienString, textTenNhanVienString, ngaysinhDate, textGioiTinhString, textSoDienThoaiString, textEmailString, textDiaChiString, tachchuoiString);
-//            try {
-//                if (nvDAO.suaNhanVien(nv)) {
-//                    JOptionPane.showMessageDialog(views, "sửa thành công");
-//                    load_table();
-//                }
-//            } catch (Exception exception) {
-//                JOptionPane.showMessageDialog(views, "lỗi sửa nhân viên:" + exception.getMessage());
-//            }
+            nhanvien nv = new nhanvien(textMaNhanVienString, textTenNhanVienString, ngaysinh, textGioiTinhString, textSoDienThoaiString, textEmailString, textDiaChiString, tachchuoiString);
+            try {
+                nvApiClient.suaNhanVien(nv);
+                JOptionPane.showMessageDialog(views, "sửa thành công");
+                load_table();
+
+            } catch (Exception exception) {
+                JOptionPane.showMessageDialog(views, "lỗi sửa nhân viên:" + exception.getMessage());
+            }
 
         }
     }
@@ -179,18 +180,14 @@ public class nhanvienController {
             if (result == JOptionPane.YES_OPTION) {
                 String maNhanVienString = views.manhanvienField.getText();
 
-//                try {
-//                    if (nvDAO.checkXoaNhanVien(maNhanVienString)) {
-//                        JOptionPane.showMessageDialog(views, "Mã nhân viên đã được tạo đơn không thể xóa");
-//                        return;
-//                    }
-//                    if (nvDAO.xoaNhanVien(maNhanVienString)) {
-//                        JOptionPane.showMessageDialog(views, "xóa thành công");
-//                        load_table();
-//                    }
-//                } catch (Exception exception) {
-//                    JOptionPane.showMessageDialog(views, "lỗi xóa nhân viên:" + exception.getMessage());
-//                }
+                try {
+                    nvApiClient.xoaNhanVien(maNhanVienString);
+                    JOptionPane.showMessageDialog(views, "xóa thành công");
+                    load_table();
+
+                } catch (Exception exception) {
+                    JOptionPane.showMessageDialog(views, "lỗi xóa nhân viên:" + exception.getMessage());
+                }
             }
         }
 
@@ -225,23 +222,23 @@ public class nhanvienController {
         public void actionPerformed(ActionEvent e) {
             String timkiemString = views.timkiemField.getText().toString().trim();
             views.nhanvienDefaultTableModel.setRowCount(0);
-//            try {
-//                List<nhanvien> list = nvDAO.timKiemNhanVien(timkiemString);
-//                for (nhanvien nv : list) {
-//                    views.nhanvienDefaultTableModel.addRow(new Object[]{
-//                        nv.getManhanvienString(),
-//                        nv.getTennhanvienString(),
-//                        nv.getNgaysinhDate(),
-//                        nv.getGioitinhString(),
-//                        nv.getSodienthoaiString(),
-//                        nv.getEmailString(),
-//                        nv.getDiachiString(),
-//                        nv.getMachucvuString()
-//                    });
-//                }
-//            } catch (Exception exception) {
-//                JOptionPane.showMessageDialog(views, "lỗi tìm kiếm:" + exception.getMessage());
-//            }
+            try {
+                List<nhanvien> list = nvApiClient.timKiemNhanVien(timkiemString);
+                for (nhanvien nv : list) {
+                    views.nhanvienDefaultTableModel.addRow(new Object[]{
+                            nv.getManhanvien(),
+                            nv.getTennhanvien(),
+                            nv.getNgaysinh(),
+                            nv.getGioitinh(),
+                            nv.getSodienthoai(),
+                            nv.getEmail(),
+                            nv.getDiachi(),
+                            nv.getMachucvu()
+                    });
+                }
+            } catch (Exception exception) {
+                JOptionPane.showMessageDialog(views, "lỗi tìm kiếm:" + exception.getMessage());
+            }
         }
     }
 

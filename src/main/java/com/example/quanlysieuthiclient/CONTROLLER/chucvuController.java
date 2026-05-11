@@ -116,7 +116,7 @@ public class chucvuController {
         public void actionPerformed(ActionEvent e) {
             cvView.chucvuDefaultTableModel.setRowCount(0);
             try {
-                List<chucvu> list=cvApiClient.timKiemChucVu(cvView.timkiemField.getText().toString());
+                List<chucvu> list=cvApiClient.timKiemChucVu(cvView.timkiemField.getText().toString().trim());
                 for (chucvu cv : list){
                     cvView.chucvuDefaultTableModel.addRow(new Object[]{
                             cv.getMachucvu(),
