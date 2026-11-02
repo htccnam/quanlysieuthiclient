@@ -164,9 +164,9 @@ this strict generation order:
 
 1.  **Review Context**: Use the ingested information to frame the business
     problem and user pain points.
-2.  **Draft Content**: Write "The Problem", "Overview", "Goals", and "Non-Goals"
+2. **Draft Content**: Write "The Problem", "Overview", "Goals", and "Non-Goals"
     in clear, plain English Markdown following the design document template
-    (`references/design_doc.md`).
+   (`references/design_doc.md`).
 3.  **Focus**: Emphasize the *why* (the user need and business value) rather
     than the *how* (technical implementation).
 4.  **Write Draft Artifact (MANDATORY)**: Save this initial draft to

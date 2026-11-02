@@ -13,7 +13,7 @@ In Claude Code or Cowork, read `${CLAUDE_PLUGIN_ROOT}/docs/claude.md` first.
 ## Overview
 
 This skill automates the creation, correction, formatting, and correctness
-verification of Elephant-and-Goldfish Model (EGM) compliant `README.md` files
+verification of Elephant-and-Goldfish Model (EGM) compliant `../../../../../README.md` files
 across a directory tree. It establishes clear architectural contracts
 (interfaces, invariants, and side effects) for both human developers and AI
 assistants.
@@ -104,7 +104,7 @@ If your harness has no subagent tool, run the scout steps inline.
     *   Ignore symbolic links to prevent infinite recursion.
     *   Ignore hidden/system directories (`.git`, `.antigravity`, `node_modules`,
         `venv`, `dist`, `build`, `third_party`).
-    *   Read `.gitignore` and `.egmignore` (if present) and ignore matching glob patterns.
+    * Read `../../../../../.gitignore` and `.egmignore` (if present) and ignore matching glob patterns.
     *   Preserve package and build manifests (`package.json`, `Cargo.toml`,
         `go.mod`, `pyproject.toml`, `Makefile`, `BUILD`) in the discovery map
         to extract verification targets later.
@@ -221,8 +221,8 @@ If your harness has no subagent tool, run the scout steps inline.
 2.  **Post-Order Traversal**: Walk the assigned `sub_tree_root` (or `path`) in
     post-order (deepest leaves first). For each directory `D`:
 
-    *   **Correction & Modification Policy**: Check if `target_filename` (default:
-        `README.md`) already exists in `D`.
+    * **Correction & Modification Policy**: Check if `target_filename` (default:
+        `../../../../../README.md`) already exists in `D`.
 
         *   If `target_filename` exists, **do not overwrite it completely**. Instead,
             read its existing content.

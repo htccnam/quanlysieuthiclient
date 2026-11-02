@@ -7,7 +7,7 @@ Frontmatter and link checks run in `pytest tests/unit` (see [TESTING.md](../../T
 1. **Small Tree Execution (Sequential)**:
    - Target a directory with 2-5 subdirectories.
    - Verify that the agent executes sequentially without spawning subagents.
-   - Verify generated `README.md` files contain Interface, Invariants, Side Effects, and relative links.
+   - Verify generated `../../../../../README.md` files contain Interface, Invariants, Side Effects, and relative links.
 2. **Safety Gate Threshold (>15 Subdirectories)**:
    - Target a directory with 16+ subdirectories.
    - Verify that discovery pauses upon reaching >15 directories and requests user confirmation in chat before proceeding.

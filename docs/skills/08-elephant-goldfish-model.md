@@ -67,7 +67,7 @@ Plugin EGM bắt nguồn từ mã nguồn mở chính thức của Google:
 #### 2.2. Vị trí cài đặt hai tầng
 Để đảm bảo môi trường IDE nhận diện được công cụ vừa giúp dự án lưu trữ toàn bộ tài nguyên một cách độc lập:
 1. **Tầng Hệ thống (Antigravity Global Plugin):** Nằm tại `~/.gemini/config/plugins/egm/` để nạp trực tiếp vào ngữ cảnh của AI Assistant khi khởi động.
-2. **Tầng Dự án (Project Workspace Resource):** Đã được sao chép nguyên vẹn vào `docs/skills/egm/` để bất kỳ lập trình viên nào clone dự án cũng có thể đọc, tra cứu và sử dụng.
+2. **Tầng Dự án (Project Workspace Resource):** Đã được sao chép nguyên vẹn vào `../../.gemini/skills/egm` để bất kỳ lập trình viên nào clone dự án cũng có thể đọc, tra cứu và sử dụng.
 
 #### 📂 MINH HỌA SỰ TIẾN HÓA CỦA THƯ MỤC
 ```text
@@ -142,7 +142,7 @@ Quy trình EGM chia tách nghiêm ngặt giữa khâu **Tư duy thiết kế** v
 
 ### 4. Giai đoạn 3: Chi tiết bộ 7 Skills và 9 Swarm Reviewer Agents
 
-#### 4.1. Bộ 7 Skills quy trình trong `docs/skills/egm/skills/`
+#### 4.1. Bộ 7 Skills quy trình trong `../../.gemini/skills/egm`
 
 | Tên Skill | Mục đích chính | Khi nào kích hoạt? |
 | :--- | :--- | :--- |
@@ -154,7 +154,7 @@ Quy trình EGM chia tách nghiêm ngặt giữa khâu **Tư duy thiết kế** v
 | **`egm-resolve`** | Phân tích từng phản biện, quyết định đồng ý/bác bỏ và sửa doc | Sau khi có báo cáo từ đợt Review |
 | **`egm-drift-report`** | So sánh AST code thực tế với đặc tả để tìm điểm lệch | Trước khi mở Pull Request / Release |
 
-#### 4.2. Bộ 9 Persona Subagents (Goldfish Reviewers) trong `docs/skills/egm/agents/`
+#### 4.2. Bộ 9 Persona Subagents (Goldfish Reviewers) trong `../../.gemini/skills/egm`
 
 Khi chạy `egm-review`, hệ thống triệu hồi các subagent độc lập đại diện cho các góc nhìn khắt khe:
 
