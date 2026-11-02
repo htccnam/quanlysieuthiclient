@@ -71,15 +71,41 @@ C:\Users\<User>\AppData\Local\Programs\Python\PythonXX\
 
 #### 3.1. Chạy lệnh phân tích dự án
 
-Đứng tại thư mục gốc của dự án `quanlysieuthiclient` (`D:\github\quanlyduanphanmem\quanlysieuthiclient`), gõ lệnh:
+Đứng tại thư mục gốc của dự án `quanlysieuthiclient` (`D:\github\quanlyduanphanmem\quanlysieuthiclient`):
 
-```bash
-graphify .
-```
+##### 👉 Cách 1: Chỉ phân tích Code Java (Khuyên dùng - Không cần API Key, miễn phí 100%)
+Dự án của bạn có các file tài liệu (`.md`, `docs/`). Để quét mã nguồn Java mà không cần nạp bất kỳ API Key nào, hãy thực hiện theo 2 bước tiêu chuẩn:
+
+* **Bước A - Quét & trích xuất AST mã nguồn (sinh ra `graph.json`):**
+  ```bash
+  graphify . --code-only
+  ```
+* **Bước B - Phân cụm kiến trúc & sinh giao diện trực quan (sinh ra `graph.html` & `GRAPH_REPORT.md`):**
+  ```bash
+  graphify cluster-only .
+  ```
+  *(Hoặc nếu chỉ cần xem nhanh file HTML, bạn có thể chạy: `graphify export html`).*
+
+##### 👉 Cách 2: Phân tích toàn bộ mã nguồn VÀ tài liệu bằng AI (Cần LLM API Key)
+Nếu muốn Graphify dùng mô hình ngôn ngữ lớn (LLM) để đọc hiểu ngữ nghĩa cả 9 file tài liệu trong `docs/` và `README.md`, hãy cấp API Key trước khi chạy:
+
+* **Trên Windows PowerShell:**
+  ```powershell
+  $env:GEMINI_API_KEY = "api_key_cua_ban"
+  graphify .
+  ```
+* **Trên Command Prompt (CMD):**
+  ```cmd
+  set GEMINI_API_KEY=api_key_cua_ban
+  graphify .
+  ```
+  *(Có thể dùng `OPENAI_API_KEY`, `ANTHROPIC_API_KEY` hoặc `DEEPSEEK_API_KEY`).*
 
 #### 🔍 Giải phẫu chi tiết lệnh Terminal
-* `graphify`: Lệnh binary vừa được cài đặt ở Giai đoạn 1.
-* `.`: Tham số đường dẫn đại diện cho thư mục hiện tại (Current Directory), báo cho công cụ biết cần phân tích toàn bộ cây thư mục từ gốc dự án trở vào.
+* `graphify`: Lệnh binary CLI được cài đặt từ gói `graphifyy`.
+* `.`: Tham số đường dẫn đại diện cho thư mục hiện tại (Current Directory).
+* `--code-only`: Cờ chỉ thị phân tích cú pháp AST cục bộ (Tree-sitter) cho các file code, bỏ qua các file tài liệu/ảnh, **hoàn toàn không cần API key và không tốn chi phí**.
+* `cluster-only`: Lệnh gom nhóm các class thành các cụm module nghiệp vụ (Community) và tự động biên dịch báo cáo kiến trúc tóm tắt.
 
 #### 🧠 Tư duy logic: Tại sao không đọc file thủ công?
 Parser của Graphify dùng engine Tree-sitter của ngôn ngữ Java để tìm kiếm chính xác các cấu trúc `import`, `class inheritance` (kế thừa), `method calls` (gọi hàm) thay vì chỉ tìm chuỗi ký tự bằng grep/findstr vốn hay bị lẫn comment hoặc trùng tên biến.
@@ -89,8 +115,8 @@ Ngay sau khi lệnh kết thúc, dự án xuất hiện thêm thư mục đầu 
 
 ```text
 quanlysieuthiclient/
-├── 📁 graphify-out/          <-- [MỚI TẠO chính xác từ lệnh graphify .] Chứa kết quả đồ thị tri thức
-│   ├── 📄 GRAPH_REPORT.md    <-- [MỚI TẠO] Báo cáo tóm tắt kiến trúc dành cho Lập trình viên và AI
+├── 📁 graphify-out/          <-- [MỚI TẠO] Chứa kết quả đồ thị tri thức (ĐÃ ĐƯỢC THÊM VÀO .gitignore)
+│   ├── 📄 GRAPH_REPORT.md    <-- [MỚI TẠO] Báo cáo tóm tắt kiến trúc dành cho Lập trình viên và AI (656 nodes, 1768 edges)
 │   ├── 📄 graph.html         <-- [MỚI TẠO] Giao diện trực quan đồ thị mạng lưới để mở bằng trình duyệt
 │   └── 📄 graph.json         <-- [MỚI TẠO] Dữ liệu cấu trúc Node & Edge cho các công cụ tích hợp
 ├── 📁 src/
@@ -142,6 +168,20 @@ Start-Process "graphify-out\graph.html"
 >   graphify-out/
 >   ```
 
+> [!WARNING]
+> **Lỗi 3: `error: no LLM API key found (X doc/paper/image file(s) need semantic extraction)`**
+> * **Nguyên nhân:** Dự án có chứa các file markdown/tài liệu (`README.md`, `docs/`). Mặc định lệnh `graphify .` sẽ gọi AI để đọc tài liệu nên đòi hỏi phải có API Key (Gemini, OpenAI...).
+> * **Khắc phục:** 
+>   * **Cách 1 (Đơn giản nhất):** Thêm cờ `--code-only` để chỉ quét mã nguồn Java bằng AST offline:
+>     ```bash
+>     graphify . --code-only
+>     ```
+>   * **Cách 2:** Cung cấp API Key trước khi quét nếu muốn phân tích cả tài liệu:
+>     ```powershell
+>     $env:GEMINI_API_KEY = "your_key"
+>     graphify .
+>     ```
+
 [⬆️ Quay lại Mục lục](#mục-lục)
 
 ---
@@ -171,7 +211,7 @@ Thay vì dùng chức năng Find in Files của IDE dễ bị sót các lệnh g
 Mỗi khi bạn vừa kéo code mới từ nhánh của đồng đội (ví dụ `git pull origin Hoag` hoặc `nam`), hãy chạy lệnh cập nhật gia tăng (Incremental Update):
 
 ```bash
-graphify . --watch
+graphify . --code-only --watch
 ```
 
 ##### 🔍 Giải phẫu chi tiết lệnh Terminal
@@ -189,12 +229,15 @@ Prompt mẫu gửi AI:
 
 #### 📌 Bảng tra cứu nhanh lệnh Graphify (Cheat Sheet)
 
-| Mục đích công việc | Câu lệnh thực thi |
-| :--- | :--- |
-| Quét toàn bộ dự án lần đầu | `graphify .` |
-| Mở xem giao diện tương tác mạng lưới | `Start-Process "graphify-out\graph.html"` |
-| Tìm kiếm quan hệ của một Controller | `graphify query "TaoDonController"` |
-| Bật chế độ tự động cập nhật khi gõ code | `graphify . --watch` |
+| Mục đích công việc | Câu lệnh thực thi | Ghi chú |
+| :--- | :--- | :--- |
+| **Bước 1: Quét trích xuất Code Java** | `graphify . --code-only` | **Không cần API Key**, miễn phí & offline 100% |
+| **Bước 2: Phân cụm & tạo báo cáo HTML** | `graphify cluster-only .` | Tự động tạo `graph.html` và `GRAPH_REPORT.md` |
+| Xuất nhanh riêng file HTML | `graphify export html` | Chỉ tạo lại file `graph.html` từ `graph.json` |
+| Mở xem giao diện tương tác mạng lưới | `Start-Process "graphify-out\graph.html"` | Mở báo cáo đồ thị trên trình duyệt |
+| Quét cả Code lẫn Tài liệu Docs (AI) | `graphify .` | Yêu cầu phải có `GEMINI_API_KEY` hoặc `OPENAI_API_KEY` |
+| Tìm kiếm quan hệ của một Controller | `graphify query "TaoDonController"` | Tra cứu liên kết phụ thuộc của class |
+| Bật chế độ tự động cập nhật khi gõ code | `graphify . --code-only --watch` | Tự động vẽ thêm node khi thêm file code mới |
 
 [⬆️ Quay lại Mục lục](#mục-lục)
 
