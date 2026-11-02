@@ -37,3 +37,10 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+### Graphify Skill Outputs ###
+graphify-out/
+
+### Repomix Skill Outputs ###
+repomix-output.xml
+*-output.xml

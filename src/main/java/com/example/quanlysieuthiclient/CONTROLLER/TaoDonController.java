@@ -1,17 +1,9 @@
 package com.example.quanlysieuthiclient.CONTROLLER;
 
-import com.example.quanlysieuthiclient.APICLIENT.DonHangApiClient;
-import com.example.quanlysieuthiclient.APICLIENT.KhachHangApiClient;
-import com.example.quanlysieuthiclient.APICLIENT.nhanvienApiClient;
-import com.example.quanlysieuthiclient.APICLIENT.KhachHangApiClient;
-import com.example.quanlysieuthiclient.APICLIENT.sanphamApiClient;
+import com.example.quanlysieuthiclient.APICLIENT.*;
 
-import com.example.quanlysieuthiclient.DTO.ChiTietDon;
-import com.example.quanlysieuthiclient.DTO.DonHang;
-import com.example.quanlysieuthiclient.DTO.KhachHang;
-import com.example.quanlysieuthiclient.DTO.nhanvien;
+import com.example.quanlysieuthiclient.DTO.*;
 import com.example.quanlysieuthiclient.VIEW.TaoDonView;
-import com.example.quanlysieuthiclient.DTO.sanpham;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -36,26 +28,29 @@ public class TaoDonController {
         initEvents();
     }
 
-    // 1. Load dữ liệu từ API đổ vào các ComboBox và Table Sản phẩm
     private void initData() {
         try {
-            // Load Nhân viên
             List<nhanvien> listNV = nvApiClient.getAllNhanVien();
             view.getCboNV().removeAllItems();
             for (nhanvien nv : listNV) {
                 view.getCboNV().addItem(nv.getManhanvien() + " - " + nv.getTennhanvien());
             }
 
-            // Load Khách hàng
             List<KhachHang> listKH = KhachHangApiClient.getInstance().getAllKhachHang();
             view.getCboKH().removeAllItems();
             for (KhachHang kh : listKH) {
                 view.getCboKH().addItem(kh.getMaKH() + " - " + kh.getHoTen());
             }
 
-            // Load Sản phẩm vào bảng bên trái (Sản phẩm có sẵn)
            List<sanpham> listSP = sanphamApiClient.getInstance().getAllSanPham();
             view.loadDataTable(listSP);
+
+            List<khuyenmai> listKM = khuyenmaiApiClient.getInstance().getAllKhuyenMai();
+            view.getCboMaKM().removeAllItems();
+            view.getCboMaKM().addItem("");
+            for(khuyenmai km : listKM){
+                view.getCboMaKM().addItem(km.getMakhuyenmai());
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -63,25 +58,22 @@ public class TaoDonController {
     }
 
     private void initEvents() {
-        // Nút thêm sản phẩm vào đơn hàng (bảng bên phải)
         view.getBtnThem().addActionListener(e -> themSanPhamVaoGio());
 
-        // Nút xóa sản phẩm khỏi đơn hàng
         view.getBtnXoa().addActionListener(e -> xoaSanPhamKhoiGio());
 
-        // Nút Lưu đơn hàng (Gửi API)
         view.getBtnLuu().addActionListener(e -> luuDonHang());
 
-        // Tìm kiếm sản phẩm nhanh
+        view.getCboMaKM().addActionListener(e -> tinhToanTongTien());
+
         view.getTxtTimKiem().addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
-                // logic gọi api search sản phẩm và update tableSanPham
+
             }
         });
     }
 
-    // 2. Logic xử lý giỏ hàng tại Client
     private void themSanPhamVaoGio() {
         int row = view.getTableSanPham().getSelectedRow();
         if (row == -1) {
@@ -115,25 +107,40 @@ public class TaoDonController {
     }
 
     private void tinhToanTongTien() {
-        double tong = 0;
+        if (view.getTable() == null) return;
+        double tamTinh = 0;
+
         for (int i = 0; i < view.getTable().getRowCount(); i++) {
-            tong += Double.parseDouble(view.getTable().getValueAt(i, 4).toString());
+            tamTinh += Double.parseDouble(view.getTable().getValueAt(i, 4).toString());
         }
-        view.getLblTamTinh().setText(String.format("%,.0f đ", tong));
-        view.getLblTongTien().setText(String.format("%,.0f đ", tong)); // Có thể trừ thêm KM nếu có logic
+
+        String selectedKM = (String) view.getCboMaKM().getSelectedItem();
+        double phanTramGiam = 0;
+
+        if (selectedKM != null) {
+            String maKM = selectedKM.toString();
+            if (maKM.equals("KM01")) phanTramGiam = 0.1;      // 10%
+            else if (maKM.equals("KM02")) phanTramGiam = 0.2; // 20%
+            else if (maKM.equals("KM03")) phanTramGiam = 0.3; // 30%
+        }
+
+        double tienGiam = tamTinh * phanTramGiam;
+        double tongCuoi = tamTinh - tienGiam;
+
+        view.getLblTamTinh().setText(String.format("Tạm tính: %,.0f đ", tamTinh));
+        view.getLblKM().setText(String.format("Giảm giá (%d%%): %,.0f đ", (int)(phanTramGiam * 100), tienGiam));
+        view.getLblTongTien().setText(String.format("Tổng tiền: %,.0f đ", tongCuoi));
     }
 
     public void hienThiDonHangDeSua(DonHang dh, List<ChiTietDon> dsChiTiet) {
         isEditMode = true;
 
-        // 1. Đổ thông tin đơn hàng
         view.getTxtMaDon().setText(dh.getMadonhang());
-        view.getTxtMaDon().setEditable(false); // Không cho sửa mã đơn hàng
+        view.getTxtMaDon().setEditable(false);
         view.getNgayGD().setDate(dh.getNgaylap());
         view.getCboBanHang().setSelectedItem(dh.getPhuongthucban());
         view.getCboThanhToan().setSelectedItem(dh.getThanhtoan());
 
-        // Đổ nhân viên (Cần xử lý chuỗi vì combo của bạn là "Ma - Ten")
         for (int i = 0; i < view.getCboNV().getItemCount(); i++) {
             if (view.getCboNV().getItemAt(i).startsWith(dh.getManhanvien())) {
                 view.getCboNV().setSelectedIndex(i);
@@ -141,7 +148,6 @@ public class TaoDonController {
             }
         }
 
-        // 2. Đổ danh sách sản phẩm vào bảng (bên phải)
         DefaultTableModel modelGioHang = (DefaultTableModel) view.getTable().getModel();
         modelGioHang.setRowCount(0);
         for (ChiTietDon ct : dsChiTiet) {
@@ -157,10 +163,8 @@ public class TaoDonController {
         tinhToanTongTien();
     }
 
-    // 3. Gửi dữ liệu về API Server
     private void luuDonHang() {
         try {
-            // Thu thập thông tin Đơn hàng (DTO)
             DonHang dh = new DonHang();
             dh.setMadonhang(view.getTxtMaDon().getText());
             dh.setManhanvien(view.getCboNV().getSelectedItem().toString().split(" - ")[0]);
@@ -174,11 +178,9 @@ public class TaoDonController {
             dh.setPhuongthucban(view.getCboBanHang().getSelectedItem().toString());
             dh.setThanhtoan(view.getCboThanhToan().getSelectedItem().toString());
 
-            // Lấy text từ Label tổng tiền và parse lại số
             String tongTienStr = view.getLblTongTien().getText().replaceAll("[^0-9]", "");
             dh.setTongtien(Double.parseDouble(tongTienStr));
 
-            // Thu thập danh sách Chi tiết
             List<ChiTietDon> dsChiTiet = new ArrayList<>();
             for (int i = 0; i < view.getTable().getRowCount(); i++) {
                 ChiTietDon ct = new ChiTietDon(
@@ -193,11 +195,9 @@ public class TaoDonController {
             }
 
             if (isEditMode) {
-                // Gửi yêu cầu PUT để cập nhật
                 donHangApiClient.updateDonHang(dh.getMadonhang(), dh, dsChiTiet);
                 JOptionPane.showMessageDialog(view, "Cập nhật đơn hàng thành công!");
             } else {
-                // Gửi yêu cầu POST để tạo mới
                 donHangApiClient.saveDonHang(dh, dsChiTiet);
                 JOptionPane.showMessageDialog(view, "Lưu đơn hàng mới thành công!");
             }

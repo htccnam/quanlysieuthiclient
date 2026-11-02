@@ -37,7 +37,6 @@ public class ChiTietDonHangController {
                 tongDoanhThu += dh.getTongtien();
             }
 
-            // Cập nhật các thẻ thống kê trên View
             view.getLblTongDon().setText(String.valueOf(list.size()));
             view.getLblTongDoanhThu().setText(String.format("%,.0f đ", tongDoanhThu));
             if (!list.isEmpty()) {
@@ -59,7 +58,7 @@ public class ChiTietDonHangController {
                 if (confirm == JOptionPane.YES_OPTION) {
                     try {
                         apiClient.xoaDonHang(maDH);
-                        loadTable(); // Load lại dữ liệu
+                        loadTable();
                     } catch (Exception ex) {
                         JOptionPane.showMessageDialog(view, "Lỗi xóa: " + ex.getMessage());
                     }
@@ -74,10 +73,8 @@ public class ChiTietDonHangController {
                 return;
             }
 
-            // Lấy mã đơn hàng từ cột đầu tiên của dòng đang chọn
             String maDH = view.getTable().getValueAt(row, 0).toString();
 
-            // Gọi hàm hiển thị Dialog
             hienThiChiTiet(maDH);
         });
 
@@ -91,27 +88,21 @@ public class ChiTietDonHangController {
             String maDH = view.getTable().getValueAt(row, 0).toString();
 
             try {
-                // 1. Lấy thông tin đơn hàng đầy đủ từ danh sách đã load
                 List<DonHang> dsDonHang = apiClient.getAllDonHang();
                 DonHang dhSelected = dsDonHang.stream()
                         .filter(d -> d.getMadonhang().equals(maDH))
                         .findFirst().orElse(null);
 
-                // 2. Lấy chi tiết đơn hàng từ API
                 List<ChiTietDon> dsChiTiet = apiClient.getChiTietByMa(maDH);
 
                 if (dhSelected != null) {
-                    // 1. Tạo một cái khung cửa sổ mới
                     JFrame frame = new JFrame("Sửa đơn hàng");
 
-                    // 2. Tạo cái panel giao diện của bạn
                     TaoDonView taoDonPanel = new TaoDonView();
                     TaoDonController taoDonController = new TaoDonController(taoDonPanel);
 
-                    // 3. Đổ dữ liệu vào panel
                     taoDonController.hienThiDonHangDeSua(dhSelected, dsChiTiet);
 
-                    // 4. Gắn cái panel vào khung cửa sổ
                     frame.add(taoDonPanel);
                     frame.pack();
 
@@ -128,7 +119,6 @@ public class ChiTietDonHangController {
 
     private void hienThiChiTiet(String maDH) {
         try {
-            // Gọi API lấy danh sách chi tiết
             List<ChiTietDon> dsChiTiet = apiClient.getChiTietByMa(maDH);
 
             if (dsChiTiet == null || dsChiTiet.isEmpty()) {
@@ -136,7 +126,6 @@ public class ChiTietDonHangController {
                 return;
             }
 
-            // Tạo bảng để hiển thị trong Dialog
             String[] columns = {"Mã SP", "Tên sản phẩm", "Số lượng", "Đơn giá", "Thành tiền"};
             DefaultTableModel model = new DefaultTableModel(columns, 0);
 
@@ -155,7 +144,6 @@ public class ChiTietDonHangController {
             JScrollPane scrollPane = new JScrollPane(tableChiTiet);
             scrollPane.setPreferredSize(new Dimension(600, 300));
 
-            // Hiển thị Dialog
             JOptionPane.showMessageDialog(view, scrollPane, "Chi tiết đơn hàng: " + maDH, JOptionPane.PLAIN_MESSAGE);
 
         } catch (Exception ex) {
