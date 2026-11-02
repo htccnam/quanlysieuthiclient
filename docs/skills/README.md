@@ -15,7 +15,7 @@
 
 ---
 
-### 1. Sơ đồ luồng dữ liệu tổng quan của 7 Skill trong dự án
+### 1. Sơ đồ luồng dữ liệu tổng quan của bộ Skill trong dự án
 
 ```text
                ┌─────────────────────────────────────────────────────────┐
@@ -82,6 +82,7 @@ Toàn bộ 7 kỹ năng đã được biên soạn thành các cẩm nang độc
 | **05** | **WireMock API Testing** | [05-wiremock-api.md](file:///D:/github/quanlyduanphanmem/quanlysieuthiclient/docs/skills/05-wiremock-api.md) | Tầng `APICLIENT` | Dựng máy chủ giả lập localhost:8080 để test màn hình Desktop mà không cần bật backend thật |
 | **06** | **Java Checkstyle** | [06-checkstyle.md](file:///D:/github/quanlyduanphanmem/quanlysieuthiclient/docs/skills/06-checkstyle.md) | Chuẩn hóa Codebase | Quét quy tắc đặt tên file, class, biến theo chuẩn Google Java Style |
 | **07** | **Semgrep Security** | [07-semgrep.md](file:///D:/github/quanlyduanphanmem/quanlysieuthiclient/docs/skills/07-semgrep.md) | An toàn thông tin | Quét mã độc, mật khẩu hardcoded, rò rỉ token và lỗ hổng giao tiếp HTTP |
+| **08** | **Elephant-Goldfish (EGM)** | [08-elephant-goldfish-model.md](08-elephant-goldfish-model.md) | Toàn bộ dự án & Đặc tả | Phát triển dựa trên đặc tả (Spec-Driven Development), phân tách Elephant/Goldfish ngăn ngừa AI code slop |
 
 [⬆️ Quay lại Mục lục](#mục-lục)
 
@@ -100,6 +101,7 @@ Toàn bộ 7 kỹ năng đã được biên soạn thành các cẩm nang độc
 | **TC-05** | Máy chủ giả lập WireMock | `java -jar mock-server\wiremock.jar` | Client gọi API `GET /api/sanpham` nhận về JSON 200 OK |
 | **TC-06** | Kiểm tra phong cách mã nguồn | `mvn checkstyle:checkstyle` | Báo cáo `target/site/checkstyle.html` được sinh ra |
 | **TC-07** | Quét bảo mật tự động | `semgrep scan --config auto` | Không có lỗ hổng nghiêm trọng (Critical/High) |
+| **TC-08** | Rà soát đặc tả EGM | `egm-review` / `egm-draft` | Bản thiết kế hoàn chỉnh trong `docs/designs/`, vượt qua 9 reviewer swarm |
 
 [⬆️ Quay lại Mục lục](#mục-lục)
 
