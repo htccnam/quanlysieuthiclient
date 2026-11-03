@@ -41,7 +41,7 @@ public class ChiTietDonHangController {
             view.getLblTongDoanhThu().setText(String.format("%,.0f đ", tongDoanhThu));
             if (!list.isEmpty()) {
                 view.getLblDoanhThuTB().setText(String.format("%,.0f đ/đơn", tongDoanhThu / list.size()));
-            }else  {
+            } else {
                 view.getLblDoanhThuTB().setText(String.format("0 đ/đơn"));
             }
         } catch (Exception e) {
@@ -96,10 +96,17 @@ public class ChiTietDonHangController {
                 List<ChiTietDon> dsChiTiet = apiClient.getChiTietByMa(maDH);
 
                 if (dhSelected != null) {
-                    JFrame frame = new JFrame("Sửa đơn hàng");
+                    JFrame frame = new JFrame("Sửa đơn hàng: " + maDH);
+                    frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
                     TaoDonView taoDonPanel = new TaoDonView();
                     TaoDonController taoDonController = new TaoDonController(taoDonPanel);
+
+                    // Khi cập nhật thành công: tự động đóng cửa sổ sửa và làm mới bảng danh sách bên ngoài
+                    taoDonController.setOnSaveSuccessCallback(() -> {
+                        frame.dispose();
+                        loadTable();
+                    });
 
                     taoDonController.hienThiDonHangDeSua(dhSelected, dsChiTiet);
 
